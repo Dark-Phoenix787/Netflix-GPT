@@ -19,7 +19,7 @@ const Body = () => {
 
 
   return (
-    <div>
+    <div className="min-w-full">
       <RouterProvider router={approuter} />
     </div>
   );

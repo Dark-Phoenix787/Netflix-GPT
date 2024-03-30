@@ -1,46 +1,22 @@
-import React, { useEffect } from "react";
-import { onAuthStateChanged, signOut } from "firebase/auth";
+// import React, { useEffect } from "react";
+import { signOut } from "firebase/auth";
 import { auth } from "../utils/firebase";
-import { useNavigate } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
-import { adduser, removeuser } from "../utils/userSlice";
+// import { useNavigate } from "react-router-dom";
+import { useSelector } from "react-redux";
+
+import useAuthentication from "../Hooks/useAuthentication";
 
 const Header = () => {
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
   const user = useSelector((store) => store.user);
-  const dispatch = useDispatch();
+  // const dispatch = useDispatch();
 
-  useEffect(() => {
-    onAuthStateChanged(auth, (user) => {
-      if (user) {
-        // User is signed in, see docs for a list of available properties
-        // https://firebase.google.com/docs/reference/js/auth.user
-        const { uid, email, displayName, photoURL } = user;
-        dispatch(
-          adduser({
-            uid: uid,
-            email: email,
-            displayName: displayName,
-            photoURL: photoURL,
-          })
-        );
-        navigate("/browse");
-
-        // ...
-      } else {
-        // User is signed out
-        // ...
-        dispatch(removeuser());
-        navigate("/");
-      }
-    });
-  }, []);
+  useAuthentication();
 
   const handlesignout = () => {
     signOut(auth)
       .then(() => {
         // Sign-out successful.
-        
       })
       .catch((error) => {
         // An error happened.
@@ -51,8 +27,8 @@ const Header = () => {
     <div
       className={
         user
-          ? "flex justify-between fixed w-full bg-gradient-to-b from-black"
-          : "fixed z-10 bg-gradient-to-b from-black"
+          ? "flex justify-between fixed w-full z-10 bg-gradient-to-b from-black"
+          : "absolute z-10 bg-gradient-to-b from-black"
       }
     >
       <div className={user ? " ml-8 w-[160px] " : "w-[180px] ml-36"}>
